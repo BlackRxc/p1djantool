@@ -10,34 +10,28 @@ if /i "%~1"=="/optweakD" goto optimizationD
 if /i "%~1"=="/animationsd" goto animD
 if /i "%~1"=="/animationse" goto animE
 if /i "%~1"=="/ctemp" goto cleantemp
-goto finishNRB
+exit
 :cleantemp
 del /s /f /q C:\Windows\Prefetch\*.*
 del /s /f /q C:\Windows\Temp\*.*
 del /s /f /q %localappdata%\Temp\*.*
-goto finishNRB
+exit
 :animD
 reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DWM" /v "DisallowAnimations" /t REG_DWORD /d "1" /f
 C:\Windows\AtlasModules\nsudo -U:C -P:E -Wait reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "MinAnimate" /t REG_DWORD /d "0" /f
 C:\Windows\AtlasModules\nsudo -U:C -P:E -Wait reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarAnimations" /t REG_DWORD /d "0" /f
 C:\Windows\AtlasModules\nsudo -U:C -P:E -Wait reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t REG_DWORD /d "3" /f
 C:\Windows\AtlasModules\nsudo -U:C -P:E -Wait reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "UserPreferencesMask" /t REG_BINARY /d "9012038010000000" /f
-goto finish
+exit
 :animE
 reg delete "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DWM" /v "DisallowAnimations" /f >nul 2>nul
 C:\Windows\AtlasModules\nsudo -U:C -P:E -Wait reg delete "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "MinAnimate" /f >nul 2>nul
 C:\Windows\AtlasModules\nsudo -U:C -P:E -Wait reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarAnimations" /t REG_DWORD /d "1" /f
 C:\Windows\AtlasModules\nsudo -U:C -P:E -Wait reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t REG_DWORD /d "1" /f
 C:\Windows\AtlasModules\nsudo -U:C -P:E -Wait reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "UserPreferencesMask" /t REG_BINARY /d "9e3e078012000000" /f
-goto finish
-:reset
-ipconfig /flushdns
-netsh int ipv4 reset
-netsh int ipv6 reset
-netsh winsock reset
-goto finish
+exit
 :optimizationE
-goto finish
+exit
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /d 0 /t REG_DWORD /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /d 0x26 /t REG_DWORD /f
 if /i "%~2"=="4" (reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control" /v "SvcHostSplitThresholdInKB" /d 0x4194304 /t REG_DWORD /f)
@@ -50,11 +44,11 @@ if /i "%~2"=="20" (reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control" /v 
 if /i "%~2"=="24" (reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control" /v "SvcHostSplitThresholdInKB" /d 0x25165824 /t REG_DWORD /f)
 if /i "%~2"=="32" (reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control" /v "SvcHostSplitThresholdInKB" /d 0x33554432 /t REG_DWORD /f)
 if /i "%~2"=="64" (reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control" /v "SvcHostSplitThresholdInKB" /d 0x67108864 /t REG_DWORD /f)
-goto finish
+exit
 :optimizationD
 reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /f
 reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /f
-goto finish
+exit
 
 
 :background
@@ -74,7 +68,7 @@ taskkill /f /im "%%i"
 )
 )
 )
-goto finishNRB
+exit
 
 :inputlag
 FOR /F %%a in ('WMIC PATH Win32_USBHub GET DeviceID^| FINDSTR /L "VID_"') DO (
@@ -99,7 +93,7 @@ reg.exe add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Mul
 reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\usbflags" /v "fid_D1Latency" /d 0 /t REG_DWORD /f
 reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\usbflags" /v "fid_D2Latency" /d 0 /t REG_DWORD /f
 reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\usbflags" /v "fid_D3Latency" /d 0 /t REG_DWORD /f
-goto finishNRB
+exit
 
 :networkE
 for /f %%i in ('wmic path win32_networkadapter get GUID ^| findstr "{"') do (
@@ -166,7 +160,7 @@ netsh int tcp set global rsc=disabled
 for /f "tokens=1" %%i in ('netsh int ip show interfaces ^| findstr [0-9]') do (
 	netsh int ip set interface %%i routerdiscovery=disabled store=persistent
 )
-goto finish
+exit
 
 :networkD
 netsh int ip reset
@@ -177,9 +171,3 @@ for /f "tokens=3* delims=: " %%i in ('pnputil /enum-devices /class Net /connecte
 )
 pnputil /scan-devices
 
-:finish
-	echo Finished, please reboot for changes to apply.
-	pause&exit
-:finishNRB
-	echo Finished, changes have been applied.
-	pause&exit
