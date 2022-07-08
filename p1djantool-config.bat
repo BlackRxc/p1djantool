@@ -1,4 +1,4 @@
-@echo off
+
 SETLOCAL EnableDelayedExpansion
 if /i "%~1"=="/netreset" goto reset
 if /i "%~1"=="/optweakE" goto optimizationE
@@ -60,6 +60,9 @@ if not "%%i"=="cmd.exe" (
 if not "%%i"=="tasklist.exe" (
 if not "%%i"=="p1djanTool-V2.exe" (
 if not "%%i"=="p1djantool-config.bat" (
+if not "%%i"=="nsudo.exe" (
+if not "%%i"=="DevManView.exe" (
+if not "%%i"=="pssuspend.exe" (
 taskkill /f /im "%%i" 
 )
 )
@@ -68,7 +71,10 @@ taskkill /f /im "%%i"
 )
 )
 )
-exit
+)
+)
+)
+pause & exit
 
 :inputlag
 FOR /F %%a in ('WMIC PATH Win32_USBHub GET DeviceID^| FINDSTR /L "VID_"') DO (
