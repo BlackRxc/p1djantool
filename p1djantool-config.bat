@@ -12,7 +12,6 @@ if /i "%~1"=="/animationse" goto animE
 if /i "%~1"=="/ctemp" goto cleantemp
 goto finishNRB
 :cleantemp
-del /s /f /q %userprofile%\Recent\*.*
 del /s /f /q C:\Windows\Prefetch\*.*
 del /s /f /q C:\Windows\Temp\*.*
 goto finishNRB
