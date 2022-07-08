@@ -14,6 +14,7 @@ goto finishNRB
 :cleantemp
 del /s /f /q C:\Windows\Prefetch\*.*
 del /s /f /q C:\Windows\Temp\*.*
+del /s /f /q %localappdata%\Temp\*.*
 goto finishNRB
 :animD
 reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DWM" /v "DisallowAnimations" /t REG_DWORD /d "1" /f
