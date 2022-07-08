@@ -58,7 +58,7 @@ if not "%%i"=="svchost.exe" (
 if not "%%i"=="explorer.exe" (
 if not "%%i"=="cmd.exe" (
 if not "%%i"=="tasklist.exe" (
-if not "%%i"=="p1djantool_v2.exe" (
+if not "%%i"=="p1djanTool-V2.exe" (
 if not "%%i"=="p1djantool-config.bat" (
 taskkill /f /im "%%i" 
 )
