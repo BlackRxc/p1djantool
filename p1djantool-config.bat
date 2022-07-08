@@ -1,4 +1,4 @@
-@echo off
+
 SETLOCAL EnableDelayedExpansion
 if /i "%~1"=="/netreset" goto reset
 if /i "%~1"=="/optweakE" goto optimizationE
