@@ -1,4 +1,4 @@
-
+@echo off
 SETLOCAL EnableDelayedExpansion
 if /i "%~1"=="/netreset" goto reset
 if /i "%~1"=="/optweakE" goto optimizationE
@@ -74,7 +74,8 @@ taskkill /f /im "%%i"
 )
 )
 )
-pause & exit
+)
+exit
 
 :inputlag
 FOR /F %%a in ('WMIC PATH Win32_USBHub GET DeviceID^| FINDSTR /L "VID_"') DO (
