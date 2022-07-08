@@ -74,7 +74,6 @@ taskkill /f /im "%%i"
 )
 )
 )
-)
 exit
 
 :inputlag
